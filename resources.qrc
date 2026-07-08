@@ -1,0 +1,24 @@
+<!DOCTYPE RCC><RCC version="1.0">
+<qresource>
+    <file>images/new-file.svg</file>
+    <file>images/open.svg</file>
+    <file>images/save.svg</file>
+    <file>images/saveAs.svg</file>
+    <file>images/print.svg</file>
+    <file>images/check.svg</file>
+    <file>images/addTab.svg</file>
+
+    <file>images/undo.svg</file>
+    <file>images/redo.svg</file>
+    <file>images/cut.svg</file>
+    <file>images/copy.svg</file>
+    <file>images/paste.svg</file>
+    <file>images/find.svg</file>
+
+
+    <file>images/zoomIn.svg</file>
+    <file>images/zoomOut.svg</file>
+    <file>images/about.svg</file>
+    <file>images/close.svg</file>
+</qresource>
+</RCC>
