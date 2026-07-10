@@ -988,18 +988,33 @@ class MainWindow(QMainWindow):
             self.status_bar.showMessage("The selected file no longer exists on disk", 4000)
 
     def open_file(self):
-        #Opens an existing file from disk into the ideal tab safely and detects encoding and line endings.#
-        all_supported = "All Supported Formats (*.py *.cpp *.h *.c *.cs *.java *.js *.ts *.php *.html *.htm *.css *.sql *.vba *.vb *.json *.xml *.yaml *.yml *.ini *.conf *.sh *.ps1 *.bat *.txt)"
-        plain_docs = "Plain Documents (*.txt)"
-        code_files = "Code Files (*.py *.cpp *.h *.c *.cs *.java *.js *.ts *.php *.sh *.ps1 *.bat *.vba *.vb)"
-        data_markup = "Data and markup (*.json *.xml *.yaml *.yml *.html *.htm *.css *.sql)"
-        config_files = "Configuration files (*.ini *.conf)"
-        all_files = "All files (*.*)"
+        #Opens an existing file from disk into the ideal tab safely.
+        #Detects encoding and line endings, and applies simplified filter 
+        #patterns to ensure full compatibility with both KDE and Ubuntu (GTK).
+                
+        # Simplified and GTK-compatible filter patterns to prevent Ubuntu's dialogue from freezing
+        filters = [
+            "All Supported Formats (*.py *.cpp *.c *.h *.cs *.java *.js *.ts *.php *.html *.css *.sql *.json *.xml *.yaml *.ini *.sh *.txt)",
+            "Text Files (*.txt)",
+            "Python Files (*.py)",
+            "Web Files (*.html *.css *.js *.ts *.php)",
+            "Code Files (*.cpp *.c *.h *.cs *.java *.sh)",
+            "Data/Config Files (*.json *.xml *.yaml *.ini)",
+            "All Files (*)"  # Fallback option, must be last
+        ]
         
-        file_filter = f"{all_supported};;{plain_docs};;{code_files};;{data_markup};;{config_files};;{all_files}"
+        file_filter = ";;".join(filters)
         
-        #  Dynamic UX Fix: Open from the last successfully accessed directory instead of resetting to My Documents
-        file_path, _ = QFileDialog.getOpenFileName(self, "Open File", self.last_opened_directory, file_filter)
+        # Determine the starting directory (fallback to Home directory if no file was opened yet)
+        start_dir = self.last_opened_directory if self.last_opened_directory else str(QStandardPaths.writableLocation(QStandardPaths.HomeLocation))
+        
+        # Trigger the native file dialogue
+        file_path, selected_filter = QFileDialog.getOpenFileName(
+            self, 
+            "Open File", 
+            start_dir, 
+            file_filter
+        )
         
         if file_path:
             try:
